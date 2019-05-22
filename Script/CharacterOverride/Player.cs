@@ -73,8 +73,8 @@ public class Player : GameCharacter {
     private void Start()
     {
         Operator.DataAssets.Path = Application.dataPath + "/Save/PlayerData.txt";
-        Invoke("loadData", 0.1f); 
-        //loadData();
+        //Invoke("loadData", 0.1f); 
+        loadData();
         GameCharacterManager.Instance.removePlayer(this);
         GameCharacterManager.Instance.addPlayer(this);
         // init
@@ -352,44 +352,45 @@ public class Player : GameCharacter {
     /// 保存数据
     /// </summary>
     public void saveData() {
-        // 更新DataAssets
-        Operator.DataAssets.CurrentHealth = CurrentHealth;
-        Operator.DataAssets.TotalHealth = TotalHealth;
-        Operator.DataAssets.CurrentEnergy = CurrentEnergy;
-        Operator.DataAssets.TotalEnergy = TotalEnergy;
+        DataForPlayer data = new DataForPlayer();
+        data.Path = Operator.DataAssets.Path;
+        data.CurrentHealth = CurrentHealth;
+        data.TotalHealth = TotalHealth;
+        data.CurrentEnergy = CurrentEnergy;
+        data.TotalEnergy = TotalEnergy;
         // 清除物品索引列表
-        Operator.DataAssets.ItemIndexList.Clear();
+        data.ItemIndexList.Clear();
         // 更新物品索引列表
         for (int i = 0; i < ItemList.Count; i++) {
-            Operator.DataAssets.addItemIndex(ItemList[i].Name, Bag.findItemGrid(ItemList[i]).ItemCount);
+            data.addItemIndex(ItemList[i].Name, Bag.findItemGrid(ItemList[i]).ItemCount);
         }
-        // 更新数据
+        // 更新DataAssets
+        Operator.DataAssets = data;
         Operator.saveData();
         print("SaveData|Path:" + Operator.DataAssets.Path);
-        try {
-            GameObject.Find("Aside").GetComponent<AsideManager>().showContent("SaveData|Path:" + Operator.DataAssets.Path);
-        } catch (Exception e) {
-            Debug.Log(e.Message);
-        }
+        MessageBoard.Instance.generateMessage("Save Data...");
     }
     /// <summary>
     /// 载入数据
     /// </summary>
     public void loadData() {
-        // 从文件更新DataAssets
-        Operator.DataAssets = (DataForPlayer)Operator.loadData();
-        print("LoadData|Path:" + Operator.DataAssets.Path);
-        // 从DataAssets载入数据
-        TotalHealth = Operator.DataAssets.TotalHealth;
-        CurrentHealth = Operator.DataAssets.CurrentHealth;
-        TotalEnergy = Operator.DataAssets.TotalEnergy;
-        CurrentEnergy = Operator.DataAssets.CurrentEnergy; 
+        // 声明临时变量存放数据
+        Data data = new Data();
+        DataForPlayer playerdata = new DataForPlayer();
+        // 从DataAssets获取数据至playerdata
+        Operator.loadData(out data);
+        playerdata = (DataForPlayer)data;
+        // 同步数据至人物
+        TotalHealth = playerdata.TotalHealth;
+        CurrentHealth = playerdata.CurrentHealth;
+        TotalEnergy = playerdata.TotalEnergy;
+        CurrentEnergy = playerdata.CurrentEnergy;
         // 清空背包
         Bag.clearItem();
         // 更新背包
         Bag.LoadMode = true;
-        for (int i = 0; i < Operator.DataAssets.ItemIndexList.Count; i++) {
-            Bag.addItem(ItemStock.Instance.getItemByName(Operator.DataAssets.ItemIndexList[i].Name), Operator.DataAssets.ItemIndexList[i].Count);
+        for (int i = 0; i < playerdata.ItemIndexList.Count; i++) {
+            Bag.addItem(ItemStock.Instance.getItemByName(playerdata.ItemIndexList[i].Name), playerdata.ItemIndexList[i].Count);
         }
         Bag.LoadMode = false;
         Operator.DataAssets.Path = Application.dataPath + "/Save/PlayerData.txt";
