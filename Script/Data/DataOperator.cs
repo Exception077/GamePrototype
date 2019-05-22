@@ -15,10 +15,10 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 //[System.Serializable]
 public class DataOperator : MonoBehaviour{
-    public DataForPlayer DataAssets;
+    public Data DataAssets;
 
     public void saveData() {
-        //保存数据      
+        // 保存数据      
         BinaryFormatter bf = new BinaryFormatter();
         if (File.Exists(DataAssets.Path)) {
             File.Delete(DataAssets.Path);
@@ -28,23 +28,22 @@ public class DataOperator : MonoBehaviour{
         file.Close();
     }
 
-    public DataForPlayer loadData() {
-        //如果路径上有文件，就读取文件
+    public void loadData(out Data data) {
+        data = new Data();
+        // 如果路径上有文件，就读取文件
         if (File.Exists(DataAssets.Path)) {
             //读取数据
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(DataAssets.Path, FileMode.Open);
-            //DataAssets = (DataForPlayer)bf.Deserialize(file);
-            //DataAssets = bf.Deserialize(file) as DataForPlayer;
             object temp = bf.Deserialize(file);
             DataAssets = (DataForPlayer)temp;
             file.Close();
         }
-        //如果没有文件，就new出一个Data
+        // 如果没有文件，就new出一个Data
         else {
-            DataAssets = new DataForPlayer();
+            DataAssets = new Data();
         }
-
-        return DataAssets;
+        data = DataAssets;
+        //return DataAssets;
     }
 }

@@ -21,9 +21,6 @@ public class DataForPlayer : Data{
     public float CurrentEnergy;
     public float TotalEnergy;
 
-    //[System.NonSerialized]
-    public string Path;
-
     public void addItemIndex(string name, int count) {
         if (ItemIndexList.Contains(findItemIndex(name)) == true) {
             findItemIndex(name).Count += count;
