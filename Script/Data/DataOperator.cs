@@ -36,7 +36,7 @@ public class DataOperator : MonoBehaviour{
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(DataAssets.Path, FileMode.Open);
             object temp = bf.Deserialize(file);
-            DataAssets = (DataForPlayer)temp;
+            DataAssets = /*(DataForPlayer)*/(Data)temp;
             file.Close();
         }
         // 如果没有文件，就new出一个Data
