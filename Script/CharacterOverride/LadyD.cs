@@ -11,6 +11,7 @@
  *History:  
 **********************************************************************************/
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 public class LadyD : NPC {
@@ -19,6 +20,8 @@ public class LadyD : NPC {
     bool IsJumping;
     // Use this for initialization
     void Start () {
+        Operator.DataAssets.Path = Application.dataPath + "/Save/" + CharacterName + "Data.txt";
+        loadData();
         #region init
         Locked = false;
         IsFacingRight = true;
@@ -27,7 +30,7 @@ public class LadyD : NPC {
         Anim = GetComponent<Animator>();
         Rbody2D = GetComponent<Rigidbody2D>();
         Alive = true;
-        CurrentHealth = TotalHealth;
+        //CurrentHealth = TotalHealth;
         CurrentCoolDown = CoolDown;
         GameCharacterManager.Instance.removeNPC(this);
         GameCharacterManager.Instance.addNPC(this);
@@ -60,6 +63,63 @@ public class LadyD : NPC {
         }
         #endregion
     }
+
+    public override void saveData() {
+        DataForNPC npcdata = new DataForNPC();
+        npcdata.Path = Operator.DataAssets.Path;
+        npcdata.CurrentHealth = CurrentHealth;
+        npcdata.TotalHealth = TotalHealth;
+        npcdata.CurrentEnergy = CurrentEnergy;
+        npcdata.TotalEnergy = TotalEnergy;
+        npcdata.Coins = Coins;
+        // 清除物品索引列表
+        npcdata.ItemReference.Clear();
+        // 更新物品索引列表
+        for (int i = 0; i < ItemList.Count; i++) {
+            npcdata.addItemIndex(ItemList[i].Name, Bag.findItemGrid(ItemList[i]).ItemCount);
+        }
+        // 更新DataAssets
+        Operator.DataAssets = npcdata;
+        Operator.saveData();
+        print("SaveData|Path:" + Operator.DataAssets.Path);
+#if UNITY_EDITOR
+#else
+        try {
+            MessageBoard.Instance.generateMessage("Save Data...");
+        } catch(Exception e) {
+            print(e.Message);
+        }
+#endif
+    }
+
+    public override void loadData() {
+        // 声明临时变量存放数据
+        Data data = new Data();
+        DataForNPC npcdata = new DataForNPC();
+        // 从DataAssets获取数据至playerdata
+        Operator.loadData(out data);
+        npcdata = (DataForNPC)data;
+        // 同步数据至人物
+        TotalHealth = npcdata.TotalHealth;
+        CurrentHealth = npcdata.CurrentHealth;
+        TotalEnergy = npcdata.TotalEnergy;
+        CurrentEnergy = npcdata.CurrentEnergy;
+        Coins = npcdata.Coins;
+        ItemReference = npcdata.ItemReference;
+        if(CurrentHealth <= 0) {
+            LoadObj.SetActive(false);
+        }
+        // 清空背包
+        Bag.clearItem();
+        // 更新背包
+        Bag.LoadMode = true;
+        for (int i = 0; i < npcdata.ItemReference.Count; i++) {
+            Bag.addItem(ItemStock.Instance.getItemByName(npcdata.ItemReference[i].Name), npcdata.ItemReference[i].Count);
+        }
+        Bag.LoadMode = false;
+        Operator.DataAssets.Path = Application.dataPath + "/Save/" + CharacterName + "Data.txt";
+    }
+
     // 更新状态
     public override void updateState(StateEnum state) {
         base.updateState(state);
@@ -94,7 +154,6 @@ public class LadyD : NPC {
     // 停止移动
     public override void stop() {
         Rbody2D.velocity = new Vector2(0, 0);
-        print("stop");
     }
     // 向某个方向移动
     public override void move(bool right, float speed) {
@@ -147,8 +206,8 @@ public class LadyD : NPC {
     }
     // 获取随机方向
     public bool getRandomDeriction() {
-        Random.InitState((int)System.DateTime.Now.Ticks);
-        int d = Random.Range(0, 2);
+        UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
+        int d = UnityEngine.Random.Range(0, 2);
         if (d == 0) {
             return false;
         } else {

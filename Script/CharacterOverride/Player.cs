@@ -40,9 +40,6 @@ public class Player : GameCharacter {
     Animator MoveAnim;
     [Header("About dead")]
     public EnableDeadUI DeadUI;
-    [Header("Data manager")]
-    public DataOperator Operator;
-    public ItemManager Bag;
     [Header("Check trigger")]
     public Transform GroundCheck;
     public Transform WallCheck;
@@ -72,7 +69,7 @@ public class Player : GameCharacter {
     public TextMeshProUGUI ChatText;
     private void Start()
     {
-        Operator.DataAssets.Path = Application.dataPath + "/Save/PlayerData.txt";
+        Operator.DataAssets.Path = Application.dataPath + "/Save/" + CharacterName + "Data.txt";
         //Invoke("loadData", 0.1f); 
         loadData();
         GameCharacterManager.Instance.removePlayer(this);
@@ -351,15 +348,16 @@ public class Player : GameCharacter {
     /// <summary>
     /// 保存数据
     /// </summary>
-    public void saveData() {
+    public override void saveData() {
         DataForPlayer data = new DataForPlayer();
         data.Path = Operator.DataAssets.Path;
         data.CurrentHealth = CurrentHealth;
         data.TotalHealth = TotalHealth;
         data.CurrentEnergy = CurrentEnergy;
         data.TotalEnergy = TotalEnergy;
+        data.Coins = Coins;
         // 清除物品索引列表
-        data.ItemIndexList.Clear();
+        data.ItemReference.Clear();
         // 更新物品索引列表
         for (int i = 0; i < ItemList.Count; i++) {
             data.addItemIndex(ItemList[i].Name, Bag.findItemGrid(ItemList[i]).ItemCount);
@@ -368,12 +366,20 @@ public class Player : GameCharacter {
         Operator.DataAssets = data;
         Operator.saveData();
         print("SaveData|Path:" + Operator.DataAssets.Path);
-        MessageBoard.Instance.generateMessage("Save Data...");
+#if UNITY_EDITOR
+#else
+        try {
+            MessageBoard.Instance.generateMessage("Save Data...");
+        }
+        catch (Exception e) {
+            print(e.Message);
+        }
+#endif
     }
     /// <summary>
     /// 载入数据
     /// </summary>
-    public void loadData() {
+    public override void loadData() {
         // 声明临时变量存放数据
         Data data = new Data();
         DataForPlayer playerdata = new DataForPlayer();
@@ -385,12 +391,14 @@ public class Player : GameCharacter {
         CurrentHealth = playerdata.CurrentHealth;
         TotalEnergy = playerdata.TotalEnergy;
         CurrentEnergy = playerdata.CurrentEnergy;
+        Coins = playerdata.Coins;
+        ItemReference = playerdata.ItemReference;
         // 清空背包
         Bag.clearItem();
         // 更新背包
         Bag.LoadMode = true;
-        for (int i = 0; i < playerdata.ItemIndexList.Count; i++) {
-            Bag.addItem(ItemStock.Instance.getItemByName(playerdata.ItemIndexList[i].Name), playerdata.ItemIndexList[i].Count);
+        for (int i = 0; i < playerdata.ItemReference.Count; i++) {
+            Bag.addItem(ItemStock.Instance.getItemByName(playerdata.ItemReference[i].Name), playerdata.ItemReference[i].Count);
         }
         Bag.LoadMode = false;
         Operator.DataAssets.Path = Application.dataPath + "/Save/PlayerData.txt";
