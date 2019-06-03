@@ -9,4 +9,4 @@ A 2D platform game made with Unity.
 ## Update  
 ###  2019/6/3
 1.为Gamecharacter基类添加了ItemReference属性，用于实现物品数据缓存.
-2.修改了Data中部分序列化处理机制
+2.修改了Data中部分序列化处理机制  
