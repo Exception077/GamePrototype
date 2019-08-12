@@ -22,6 +22,7 @@ public class Buff : MonoBehaviour {
     public bool AutoFade;
     public float Duration;
     public float Timer;
+    [SerializeField]
     protected bool Active = true;
 
     /// <summary>
@@ -44,7 +45,7 @@ public class Buff : MonoBehaviour {
         if (AutoFade == true) {
             Timer -= Time.deltaTime;
             if(Timer <= 0) {
-                Active = false;
+                // Active = false;
             }
         }
     }
@@ -54,5 +55,13 @@ public class Buff : MonoBehaviour {
     /// </summary>
     public virtual void onRemove() {
 
+    }
+
+    public virtual void setStatus(string state) {
+
+    }
+
+    public virtual string getStatus() {
+        return null;
     }
 }

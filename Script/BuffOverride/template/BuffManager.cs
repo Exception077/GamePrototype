@@ -31,6 +31,13 @@ public class BuffManager : MonoBehaviour {
     /// </summary>
     /// <param name="buff">BUFF对象</param>
     public void addBuff(Buff buff) {
+        if (buff == null) {
+            return;
+        }
+        if (Target.BuffList.Contains(buff)) {
+            //Target.BuffList.Remove(buff);
+            removeBuff(buff);
+        }
         buff.Target = Target;
         buff.onAbtain();
         Target.BuffList.Add(buff);
@@ -48,6 +55,7 @@ public class BuffManager : MonoBehaviour {
         foreach(BuffGrid bg in BGList) {
             if(bg.BUFF.Name == buff.Name) {
                 BGList.Remove(bg);
+                bg.onRemove();
                 break;
             }
         }
@@ -58,5 +66,14 @@ public class BuffManager : MonoBehaviour {
                 return;
             }
         }
+    }
+
+    public void clearBuff() {
+        foreach (BuffGrid bg in BGList) {
+            bg.BUFF.onRemove();
+            bg.onRemove();
+        }
+        BGList.Clear();
+        Target.BuffList.Clear();
     }
 }

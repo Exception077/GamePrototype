@@ -49,4 +49,8 @@ public class BuffGrid : MonoBehaviour {
             Ready = false;
         }
     }
+
+    public void onRemove() {
+        Destroy(gameObject);
+    }
 }
