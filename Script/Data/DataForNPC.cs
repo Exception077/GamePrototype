@@ -21,12 +21,12 @@ public class DataForNPC : Data {
     public float TotalEnergy;
     public int Coins;
 
-    public void addItemIndex(string name, int count) {
+    public void addItemIndex(string name, int count,string state) {
         if (ItemReference.Contains(findItemIndex(name)) == true) {
             findItemIndex(name).Count += count;
         }
         else {
-            ItemReference.Add(new ItemLoadIndex(name, count));
+            ItemReference.Add(new ItemLoadIndex(name, count, state));
         }
     }
 
