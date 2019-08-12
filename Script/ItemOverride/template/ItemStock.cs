@@ -40,9 +40,13 @@ public class ItemStock : MonoBehaviour {
     }
 
     public Item getItemByName(string name) {
-        return ItemList.Find(delegate (Item i) {
-            return i.Name== name;
-        });
+        Item item = new Item();
+        foreach (Item i in ItemList) {
+            if (i.Name == name) {
+                item = GameObject.Instantiate(i, transform);
+            }
+        }
+        return item;
     }
 
     public bool containsItem(string name) {

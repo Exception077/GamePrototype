@@ -12,7 +12,7 @@
 **********************************************************************************/
 using TMPro;
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 public class ItemGrid : MonoBehaviour {
     public ItemManager Manager;
@@ -122,7 +122,7 @@ public class ItemGrid : MonoBehaviour {
         item.Owner = Manager.Owner;
         item.onObtain();
         if (Manager.Owner.ItemList.Contains(item) == false) {
-            Manager.Owner.ItemList.Add(MyItem);
+            Manager.Owner.ItemList.Add(item);
         }
     }
     // 使用物品

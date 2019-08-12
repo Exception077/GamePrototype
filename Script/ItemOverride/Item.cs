@@ -11,7 +11,7 @@
  *History:  
 **********************************************************************************/
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 [System.Serializable]
 enum ItemStateEnum
@@ -62,5 +62,30 @@ public class Item : MonoBehaviour {
     // 当获取物品相关信息时触发
     public virtual void onAbout() {
 
+    }
+
+    // 解析状态
+    public virtual void setStatus(string state) {
+        if (state == null) {
+            return;
+        }
+        List<string> strs = new List<string>();
+        while (state.Contains("#")) {
+            if (state.Contains("|")) {
+                strs.Add(state.Substring(state.IndexOf('#') + 1, state.IndexOf('|') - state.IndexOf('#') - 1));
+                state = state.Substring(state.IndexOf('|') + 1);
+            } else {
+                strs.Add(state.Substring(state.IndexOf('#') + 1));
+                state = "";
+            } 
+        }
+        UseCount = int.Parse(strs[0]);
+        CurrentCoolDown = int.Parse(strs[1]);
+    }
+
+    // 生成状态字串
+    public virtual string getStatus() {
+        string state = "UseCount#" + UseCount.ToString() + "|CurCD#" + CurrentCoolDown;
+        return state;
     }
 }

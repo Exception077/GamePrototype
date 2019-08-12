@@ -8,9 +8,11 @@ public class ItemHealing : Item
     public float HealingCount;
     public GameObject HealingLight;
     GameObject Temp;
+    string str;
 
     public override void onObtain() {
         base.onObtain();
+        str = Description;
         CurrentCoolDown = CoolDown;
     }
 
@@ -30,6 +32,7 @@ public class ItemHealing : Item
         Invoke("finishUse", CureTime);
         return true;
     }
+
     private void finishUse() {
         Owner.CurrentHealth += HealingCount;
         if (Owner.CurrentHealth > Owner.TotalHealth) {
@@ -40,6 +43,7 @@ public class ItemHealing : Item
 
     public override void onHold() {
         base.onHold();
+        Description = str + "\n(剩余使用次数:" + UseCount + ")";
         if(CurrentCoolDown < CoolDown) {
             CurrentCoolDown += DeltaCoolDown * Time.deltaTime;
         } else {
@@ -50,5 +54,9 @@ public class ItemHealing : Item
     public override void onAbout() {
         base.onAbout();
         Owner.startChat(AboutInfo, 1 + AboutInfo.Length / 10f);
+    }
+
+    public override string getStatus() {
+        return base.getStatus();
     }
 }

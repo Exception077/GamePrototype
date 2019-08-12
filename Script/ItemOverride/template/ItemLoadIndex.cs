@@ -16,9 +16,11 @@ using System.Collections;
 public class ItemLoadIndex{
     public string Name;
     public int Count;
+    public string State;
 
-     public ItemLoadIndex(string name, int count) {
+     public ItemLoadIndex(string name, int count,string state) {
         Name = name;
         Count = count;
+        State = state;
     }
 }

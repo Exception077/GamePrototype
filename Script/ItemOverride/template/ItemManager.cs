@@ -60,6 +60,7 @@ public class ItemManager : MonoBehaviour {
         if(CurrentItemGrid == null) {
             clearInfo();
         } else {
+            updateInfo();
             RemoveButton.SetActive(CurrentItemGrid.MyItem.Descarded);
             UseButton.SetActive(CurrentItemGrid.MyItem.IsTool && Available);
             UseButtonName.text = CurrentItemGrid.MyItem.OperateName;
