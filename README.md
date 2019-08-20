@@ -8,7 +8,8 @@ A 2D platform game made with Unity.
 5.Data System.
 6.Buff System.
 7.Time System.
-8.Survive System.
+8.Survive System.  
+9.Equipment System.
 ## Update  
 ###  2019/6/3
 1.为Gamecharacter基类添加了ItemReference属性，用于实现物品数据缓存.  
@@ -22,3 +23,9 @@ A 2D platform game made with Unity.
 2.新增世界时间系统.  
 3.新增Buff系统.  
 4.新增生存系统，引入了饥饿值，并且大部分行动现在都需要消耗体力值.  
+###  2019/8/20
+1.新增装备系统.  
+2.实现了物品栏、快捷栏、装备栏之间的物品拖拽.  
+3.修复了ToxicTrap生效过程中，MouseInfo界面不能正常隐藏的Bug.  
+4.优化存储机制，现在可以正确地在快捷栏与装备栏登记物品.  
+5.为玩家添加了部分行动音效.  
