@@ -46,7 +46,7 @@ public class TaskManager : MonoBehaviour {
 
     public void finishTask(Task task) {
         MessageBoard.Instance.generateMessage("完成任务：<color=#00FF00>" + task.Name + "</color>");
-        MyItemManager.addItem(ItemStock.Instance.getItemByName(task.RewardName), task.RewardCount);
+        MyItemManager.addItem(ItemStock.Instance.getItemByID(task.RewardName), task.RewardCount);
         task.CurrentState = TaskState.FINISHED;
     }
 

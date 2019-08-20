@@ -32,9 +32,9 @@ public class ItemOperator : Command {
         switch (OperateType) {
             case OperateMode.ADD:
                 if(TargetCharacter.GetType() == typeof(Player)) {
-                    Manager.addItem(TargetItem, Count);
+                    Manager.addItem(ItemStock.Instance.getItemByID(TargetItem.ID), Count);
                 } else {
-                    TargetCharacter.ItemList.Add(TargetItem);
+                    TargetCharacter.ItemList.Add(ItemStock.Instance.getItemByID(TargetItem.ID));
                 }
                 break;
             case OperateMode.REMOVE:

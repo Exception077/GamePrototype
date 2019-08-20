@@ -36,7 +36,8 @@ public class ToxicTrap : Trap {
     public override void onEffect() {
         base.onEffect();
         foreach (GameCharacter gameCharacter in Characters) {
-            gameCharacter.BM.addBuff(Debuff);
+            if(!gameCharacter.BM.containsBuff(Debuff.ID))
+                gameCharacter.BM.addBuff(Debuff);
         }
         Effected = true;
     }

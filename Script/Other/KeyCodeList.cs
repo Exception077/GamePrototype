@@ -28,6 +28,7 @@ public class KeyCodeList
     public KeyCode Right = KeyCode.RightArrow;
     public KeyCode Bag = KeyCode.B;
     public KeyCode Menu = KeyCode.Escape;
+    public KeyCode Equipment = KeyCode.M;
 
     public static KeyCodeList Instance
     {

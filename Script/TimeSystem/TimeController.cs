@@ -1,11 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
+using System.Collections.Generic;
+[System.Serializable]
 public struct GameTime {
     public int Days;
     public int Hours;
     public int Minutes;
+    public bool compare(GameTime gt) {
+        return gt.Days == Days && gt.Hours == Hours && gt.Minutes == Minutes;
+    }
 }
 
 public class TimeController : MonoBehaviour {
@@ -17,6 +21,12 @@ public class TimeController : MonoBehaviour {
     float MinuteDuration;
     [SerializeField]
     TextMeshProUGUI TimeText;
+    [Header("EventSystem")]
+    [SerializeField]
+    GameEventManager EventManager;
+    [SerializeField]
+    List<GameEvent> GameEvents;
+
     // Use this for initialization
     void Start() {
         Timer = Time.time;
@@ -24,6 +34,17 @@ public class TimeController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        foreach (GameEvent gameEvent in GameEvents) {
+            if (gameEvent.ON) {
+                gameEvent.onEffect(converse2Time(Minutes));
+            }
+            if (convers2Minutes(gameEvent.StartTime) == Minutes) {
+                gameEvent.onStart();
+            } else if (convers2Minutes(gameEvent.StartTime) + gameEvent.Duration == Minutes) {
+                gameEvent.onFinish();
+            }
+        }
+
         if (Time.time - Timer >= MinuteDuration) {
             Minutes++;
             Timer = Time.time;
@@ -46,4 +67,7 @@ public class TimeController : MonoBehaviour {
         return time;
     }
 
+    public int convers2Minutes(GameTime time) {
+        return time.Days * 1440 + time.Hours * 60 + time.Minutes;
+    }
 }

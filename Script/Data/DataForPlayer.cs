@@ -35,7 +35,7 @@ public class DataForPlayer : Data{
 
     public ItemLoadIndex findItemIndex(string name) {
         return ItemReference.Find(delegate (ItemLoadIndex i) {
-            return i.Name == name;
+            return i.ID == name;
         });
     }
 }

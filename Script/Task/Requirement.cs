@@ -29,7 +29,7 @@ public class Requirement {
     [SerializeField]
     int CurrentKillCount;
     [SerializeField]
-    string ItemName;
+    string ItemID;
     [SerializeField]
     int TotalSearchCount;
     [SerializeField]
@@ -55,7 +55,7 @@ public class Requirement {
             case RequirementType.SEARCH:
                 CurrentSearchCount = 0;
                 foreach(ItemGrid ig in GameCharacterManager.Instance.PlayerList[0].Bag.ItemGridList) {
-                    if(ig.MyItem.Name == ItemName) {
+                    if(ig.MyItem.ID == ItemID) {
                         CurrentSearchCount = ig.ItemCount;
                         break;
                     }
