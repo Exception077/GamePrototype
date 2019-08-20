@@ -5,10 +5,10 @@ A 2D platform game made with Unity.
 2.Simple AI script for NPC.  
 3.Item System.  
 4.Conversation System.  
-5.Data System.
-6.Buff System.
-7.Time System.
-8.Survive System.  
+5.Data System.  
+6.Buff System.  
+7.Time System.  
+8.Survive System.    
 9.Equipment System.
 ## Update  
 ###  2019/6/3
