@@ -1,9 +1,9 @@
-﻿/*********************************************************************************
- *Copyright(C) 2015 by #AUTHOR#
+/*********************************************************************************
+ *Copyright(C) 2015 by Gx
  *All rights reserved.
- *FileName:     #SCRIPTFULLNAME#
- *Author:       #AUTHOR#
- *Version:      #VERSION#
+ *FileName:     AddFileHeadComment.cs
+ *Author:       Gx
+ *Version:      1.0
 /*********************************************************************************
  *Copyright(C) 2015 by FengNongtheWindCoder
  *All rights reserved.
@@ -38,11 +38,11 @@ public class AddFileHeadComment : UnityEditor.AssetModificationProcessor
         string realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
         string scriptContent = File.ReadAllText(realPath);
         //这里实现自定义的一些规则
-        scriptContent = scriptContent.Replace("#SCRIPTFULLNAME#", Path.GetFileName(newFilePath));
-        scriptContent = scriptContent.Replace("#AUTHOR#", PlayerSettings.companyName);
-        scriptContent = scriptContent.Replace("#VERSION#", "1.0");
-        scriptContent = scriptContent.Replace("#UNITYVERSION#", Application.unityVersion);
-        scriptContent = scriptContent.Replace("#DATE#", System.DateTime.Now.ToString("yyyy-MM-dd"));
+        scriptContent = scriptContent.Replace("AddFileHeadComment.cs", Path.GetFileName(newFilePath));
+        scriptContent = scriptContent.Replace("Gx", PlayerSettings.companyName);
+        scriptContent = scriptContent.Replace("1.0", "1.0");
+        scriptContent = scriptContent.Replace("2019.2.0f1", Application.unityVersion);
+        scriptContent = scriptContent.Replace("2019-08-20", System.DateTime.Now.ToString("yyyy-MM-dd"));
         File.WriteAllText(realPath, scriptContent);
     }
 }
